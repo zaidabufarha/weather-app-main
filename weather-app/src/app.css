@@ -13,3 +13,11 @@ body,
   box-sizing: border-box;
 }
 
+button {
+  border: none;
+  cursor: pointer;
+}
+
+input {
+  outline: none;
+}

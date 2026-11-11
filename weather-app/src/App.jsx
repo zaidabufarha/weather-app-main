@@ -5,6 +5,7 @@ import backgroundTodaySmall from "./assets/images/bg-today-small.svg";
 import logo from "./assets/images/logo.svg";
 import sunnyIcon from "./assets/images/icon-sunny.webp";
 import dropdownIcon from "./assets/images/icon-dropdown.svg";
+import gearIcon from "./assets/images/icon-units.svg";
 
 import "./app.css";
 function App() {
@@ -16,8 +17,8 @@ function App() {
         backgroundColor: " #02012b",
         margin: 0,
         width: "100%",
-        height: "100vh",
-        padding: 20,
+        minHeight: "100vh",
+        padding: 40,
         alignItems: "center",
         gap: 20,
       }}
@@ -31,7 +32,23 @@ function App() {
         }}
       >
         <img src={logo} />
-        <button>hi</button>
+        <button
+          style={{
+            display: "flex",
+            borderRadius: 10,
+            backgroundColor: "hsl(243, 23%, 30%)",
+            color: "white",
+            padding: 10,
+            width: 100,
+            height: 40,
+            gap: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img src={gearIcon} width={15} height={15} />
+          Units <img src={dropdownIcon} width={10} height={10} />
+        </button>
       </div>
       <h1
         style={{
@@ -53,80 +70,41 @@ function App() {
             display: "flex",
             flexDirection: "column",
             gap: 30,
-            height: 500,
           }}
         >
-          <div
-            style={{
-              background: `url(${backgroundTodayLarge})`,
-              height: 286,
-              width: 800,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: 20,
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <p
-                style={{
-                  color: "white",
-                  fontSize: 30,
-                  fontFamily: "DM Sans",
-                  fontWeight: 500,
-                  margin: 0,
-                }}
-              >
-                Berlin, Germany
-              </p>
-              <p
-                style={{
-                  color: "white",
-                  fontSize: 20,
-                  fontFamily: "DM Sans",
-                  fontWeight: 300,
-                  margin: 0,
-                }}
-              >
-                Tuesday, Aug 5, 2025
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <img src={sunnyIcon} width={80} height={80} />
-              <h1
-                style={{
-                  color: "white",
-                  fontSize: 60,
-                  fontFamily: "DM Sans",
-                  fontWeight: 500,
-                  fontStyle: "italic",
-                }}
-              >
-                20°
-              </h1>
-            </div>
-          </div>
+          <WeatherToday
+            city="Berlin"
+            country="Germany"
+            temperature="20"
+            weather="sunny"
+            date={new Date("2025-08-05")}
+          />
           <div style={{ display: "flex", gap: 30, width: 800, margin: 0 }}>
-            <RowCard />
-            <RowCard />
-            <RowCard />
-            <RowCard />
+            <RowCard text="Feels like" value="18°" />
+            <RowCard text="Humidity" value="46%" />
+            <RowCard text="Wind" value="14km/h" />
+            <RowCard text="Precipitation" value="0mm" />
+          </div>
+          <p style={{ color: "white", fontFamily: "DM Sans", margin: 0 }}>
+            Daily forecast:
+          </p>
+          <div style={{ display: "flex", gap: 30, width: 800, margin: 0 }}>
+            <RowCard text="Feels like" value="18°" />
+            <RowCard text="Humidity" value="46%" />
+            <RowCard text="Wind" value="14km/h" />
+            <RowCard text="Precipitation" value="0mm" />
           </div>
         </div>
         <div
           style={{
             display: "flex",
-            height: 500,
             borderRadius: 10,
             width: 350,
+            height: 600,
             backgroundColor: "#25253f",
             padding: 20,
             flexDirection: "column",
+            overflowY: "auto",
           }}
         >
           <div
@@ -154,10 +132,12 @@ function App() {
                 alignItems: "center",
               }}
             >
-              Tuesday <img src={dropdownIcon} width={15} height={15} />
+              Tuesday <img src={dropdownIcon} width={10} height={10} />
             </button>
           </div>
-          <h1>hi</h1>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+            <HourCard temperature={20} icon={sunnyIcon} hour={"3 PM"} />
+          ))}
         </div>
       </div>
     </div>
@@ -211,7 +191,7 @@ function SearchButton() {
     </button>
   );
 }
-function RowCard() {
+function RowCard({ text, value }) {
   return (
     <div
       style={{
@@ -231,7 +211,7 @@ function RowCard() {
           margin: 0,
         }}
       >
-        Feels like
+        {text}
       </p>
       <p
         style={{
@@ -241,7 +221,110 @@ function RowCard() {
           margin: 0,
         }}
       >
-        20
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function WeatherToday({ city, country, date, temperature, weather }) {
+  return (
+    <div
+      style={{
+        background: `url(${backgroundTodayLarge})`,
+        height: 286,
+        width: 800,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 20,
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <p
+          style={{
+            color: "white",
+            fontSize: 30,
+            fontFamily: "DM Sans",
+            fontWeight: 700,
+            margin: 0,
+          }}
+        >
+          {city}, {country}
+        </p>
+        <p
+          style={{
+            color: "white",
+            fontSize: 20,
+            fontFamily: "DM Sans",
+            fontWeight: 500,
+            margin: 0,
+          }}
+        >
+          {date.toLocaleDateString("en-US", {
+            //US format for month first
+            weekday: "long",
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </p>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
+        <img
+          src={weather === "sunny" ? sunnyIcon : dropdownIcon}
+          width={100}
+          height={100}
+        />
+        <h1
+          style={{
+            color: "white",
+            fontSize: 90,
+            fontFamily: "DM Sans",
+            fontWeight: 500,
+            fontStyle: "italic",
+          }}
+        >
+          {temperature}°
+        </h1>
+      </div>
+    </div>
+  );
+}
+function HourCard({ icon, hour, temperature }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        backgroundColor: "white",
+        justifyContent: "space-between",
+        padding: 10,
+        backgroundColor: "#2F2F49",
+        alignContent: "center",
+        gap: 20,
+        fontSize: 20,
+        borderRadius: 10,
+        color: "white",
+        fontFamily: "DM Sans",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <img src={icon} width={50} height={50} />
+        <p>{hour}</p>
+      </div>
+      <p
+        style={{
+          fontSize: 18,
+          marginRight: 10,
+        }}
+      >
+        {temperature}°
       </p>
     </div>
   );
