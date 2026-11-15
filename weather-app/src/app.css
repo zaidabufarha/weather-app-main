@@ -17,6 +17,25 @@ button {
   border: none;
   cursor: pointer;
 }
+.dropdown button {
+  border: none;
+  cursor: pointer;
+  width: 100%; height: 100%;
+  padding:10px;
+   border-radius: 10px;
+   color: white;
+   text-align: left;
+   background-color: hsl(243, 23%, 30%);
+}
+.dropdown button:hover {
+background-color: hsl(243, 23%, 40%); }
+
+hr{
+  background-color: hsl(243, 23%, 60%);;
+  height: 1px;
+  border: none;
+
+}
 
 input {
   outline: none;

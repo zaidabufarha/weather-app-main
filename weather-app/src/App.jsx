@@ -32,23 +32,75 @@ function App() {
         }}
       >
         <img src={logo} />
-        <button
-          style={{
-            display: "flex",
-            borderRadius: 10,
-            backgroundColor: "hsl(243, 23%, 30%)",
-            color: "white",
-            padding: 10,
-            width: 100,
-            height: 40,
-            gap: 10,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img src={gearIcon} width={15} height={15} />
-          Units <img src={dropdownIcon} width={10} height={10} />
-        </button>
+        <Dropdown
+          heading={
+            <>
+              <button
+                style={{
+                  display: "flex",
+                  borderRadius: 10,
+                  backgroundColor: "hsl(243, 23%, 30%)",
+                  color: "white",
+                  padding: 10,
+                  width: 100,
+                  height: 40,
+                  gap: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img src={gearIcon} width={15} height={15} />
+                Units <img src={dropdownIcon} width={10} height={10} />
+              </button>
+            </>
+          }
+          options={
+            <>
+              <button>Switch to Imperial</button>
+              <p
+                style={{
+                  margin: 0,
+                  padding: 10,
+                  textAlign: "left",
+                  fontSize: 11,
+                  color: "hsl(243, 23%, 80%)",
+                }}
+              >
+                Temperature
+              </p>
+              <button>Celsius (*C)</button>
+              <button>Fahrenheit (*F)</button>
+              <hr />
+              <p
+                style={{
+                  margin: 0,
+                  padding: 10,
+                  textAlign: "left",
+                  fontSize: 11,
+                  color: "hsl(243, 23%, 80%)",
+                }}
+              >
+                Wind Speed
+              </p>
+              <button>km/h</button>
+              <button>mph</button>
+              <hr />
+              <p
+                style={{
+                  margin: 0,
+                  padding: 10,
+                  textAlign: "left",
+                  fontSize: 11,
+                  color: "hsl(243, 23%, 80%)",
+                }}
+              >
+                Precipitation
+              </p>
+              <button>Milimeters (mm)</button>
+              <button>Inches (in)</button>
+            </>
+          }
+        />
       </div>
       <h1
         style={{
@@ -82,25 +134,44 @@ function App() {
           <div style={{ display: "flex", gap: 30, width: 800, margin: 0 }}>
             <RowCard text="Feels like" value="18°" />
             <RowCard text="Humidity" value="46%" />
-            <RowCard text="Wind" value="14km/h" />
-            <RowCard text="Precipitation" value="0mm" />
+            <RowCard text="Wind" value="14 km/h" />
+            <RowCard text="Precipitation" value="0 mm" />
           </div>
-          <p style={{ color: "white", fontFamily: "DM Sans", margin: 0 }}>
+          <p
+            style={{
+              color: "white",
+              fontFamily: "DM Sans",
+              margin: 0,
+              fontSize: "18px",
+            }}
+          >
             Daily forecast:
           </p>
-          <div style={{ display: "flex", gap: 30, width: 800, margin: 0 }}>
-            <RowCard text="Feels like" value="18°" />
-            <RowCard text="Humidity" value="46%" />
-            <RowCard text="Wind" value="14km/h" />
-            <RowCard text="Precipitation" value="0mm" />
+          <div
+            style={{
+              display: "flex",
+              gap: 20,
+              width: 800,
+              margin: 0,
+            }}
+          >
+            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
+            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
+            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
+            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
+            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
+            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
+            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
           </div>
         </div>
         <div
           style={{
             display: "flex",
             borderRadius: 10,
+            height: 660,
             width: 350,
-            height: 600,
+            flex: 1,
+            gap: 10,
             backgroundColor: "#25253f",
             padding: 20,
             flexDirection: "column",
@@ -118,25 +189,25 @@ function App() {
             <p style={{ color: "white", fontSize: 20, fontFamily: "DM Sans" }}>
               Hourly forecast
             </p>
-            <button
-              style={{
-                display: "flex",
-                borderRadius: 10,
-                backgroundColor: "hsl(243, 23%, 30%)",
-                color: "white",
-                padding: 10,
-                width: 100,
-                height: 40,
-                gap: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              Tuesday <img src={dropdownIcon} width={10} height={10} />
-            </button>
+            <Dropdown
+              heading={
+                <>
+                  Tuesday <img src={dropdownIcon} width={10} height={10} />
+                </>
+              }
+              options={
+                <>
+                  <button>Wednesday</button> <button>Wednesday</button>
+                  <button>Wednesday</button>
+                  <button>Wednesday</button>
+                  <button>Wednesday</button>
+                  <button>Wednesday</button>
+                </>
+              }
+            />
           </div>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-            <HourCard temperature={20} icon={sunnyIcon} hour={"3 PM"} />
+            <HourCard temperature={20} icon={sunnyIcon} hour={`${i} PM`} />
           ))}
         </div>
       </div>
@@ -185,6 +256,7 @@ function SearchButton() {
         color: "white",
         padding: 10,
         width: 100,
+        fontSize: 18,
       }}
     >
       Search
@@ -200,7 +272,7 @@ function RowCard({ text, value }) {
         backgroundColor: "hsl(243, 23%, 30%)",
         padding: 20,
         borderRadius: 10,
-        width: 180,
+        flex: 1,
       }}
     >
       <p
@@ -216,7 +288,7 @@ function RowCard({ text, value }) {
       <p
         style={{
           color: "white",
-          fontSize: 40,
+          fontSize: 36,
           fontFamily: "DM Sans",
           margin: 0,
         }}
@@ -304,7 +376,7 @@ function HourCard({ icon, hour, temperature }) {
         display: "flex",
         backgroundColor: "white",
         justifyContent: "space-between",
-        padding: 10,
+        padding: 5,
         backgroundColor: "#2F2F49",
         alignContent: "center",
         gap: 20,
@@ -326,6 +398,84 @@ function HourCard({ icon, hour, temperature }) {
       >
         {temperature}°
       </p>
+    </div>
+  );
+}
+function DayCard({ day, weather, high, low }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "hsl(243, 23%, 30%)",
+        padding: 10,
+        borderRadius: 10,
+        alignItems: "center",
+        color: "white",
+        fontSize: 18,
+        fontFamily: "DM Sans",
+        margin: 0,
+        flex: 1,
+      }}
+    >
+      <p style={{ fontSize: 24, margin: 0 }}>{day}</p>
+      <img src={weather} style={{ width: 70 }} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <p style={{ margin: 0 }}>{high}</p>
+        <p style={{ margin: 0 }}>{low}</p>
+      </div>
+    </div>
+  );
+}
+function Dropdown({ heading, options }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ position: "relative" }}>
+      <button
+        style={{
+          display: "flex",
+          borderRadius: 10,
+          backgroundColor: "hsl(243, 23%, 30%)",
+          color: "white",
+          padding: 10,
+          width: 100,
+          height: 40,
+          gap: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          fontFamily: "DM Sans",
+        }}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        {heading}
+      </button>
+      {open && (
+        <div
+          className="dropdown"
+          style={{
+            position: "absolute",
+            right: 0,
+            top: "110%",
+            borderRadius: 10,
+            backgroundColor: "hsl(243, 23%, 30%)",
+            color: "white",
+            width: 150,
+            padding: 5,
+            fontFamily: "DM Sans",
+            textAlign: "left",
+          }}
+        >
+          {options}
+        </div>
+      )}
     </div>
   );
 }
