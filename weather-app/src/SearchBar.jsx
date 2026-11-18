@@ -6,6 +6,7 @@ import "./app.css";
 function SearchBar({ setPlace }) {
   const [input, setInput] = useState("");
   const [debouncedInput, setDebouncedInput] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -43,23 +44,30 @@ function SearchBar({ setPlace }) {
 
   // if (error) return "An error has occured: " + error.message;
 
+  useEffect(() => {
+    if (data && data.results && submitting) {
+      setPlace({
+        name: data.results[0].name,
+        country: data.results[0].country,
+        latitude: data.results[0].latitude,
+        longitude: data.results[0].longitude,
+      });
+      setSubmitting(false);
+    }
+  }, [submitting, data]);
   return (
     <form
       style={{ display: "flex", gap: 10 }}
       onSubmit={(e) => {
         e.preventDefault();
-        setPlace({
-          name: data.results[0].name,
-          country: data.results[0].country,
-          latitude: data.results[0].latitude,
-          longitude: data.results[0].longitude,
-        });
+        setDebouncedInput(input);
+        setSubmitting(true);
       }}
     >
       <div
         ref={ref}
         onClick={() => {
-          setOpen(!open);
+          setOpen(true);
         }}
         style={{
           position: "relative",
@@ -107,14 +115,15 @@ function SearchBar({ setPlace }) {
           >
             {data.results.map((r) => (
               <button
-                onClick={() =>
+                key={r.id}
+                onClick={() => {
                   setPlace({
                     name: r.name,
                     country: r.country,
                     latitude: r.latitude,
                     longitude: r.longitude,
-                  })
-                }
+                  });
+                }}
               >
                 {r.name != r.country && r.country != undefined
                   ? `${r.name}, ${r.country}`

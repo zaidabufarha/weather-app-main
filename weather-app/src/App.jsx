@@ -59,7 +59,7 @@ function App() {
         <Dropdown
           heading={
             <>
-              <button
+              <div
                 style={{
                   display: "flex",
                   borderRadius: 10,
@@ -73,9 +73,12 @@ function App() {
                   alignItems: "center",
                 }}
               >
-                <img src={gearIcon} width={15} height={15} />
-                Units <img src={dropdownIcon} width={10} height={10} />
-              </button>
+                <div style={{ display: "flex", gap: 5 }}>
+                  <img src={gearIcon} width={15} height={15} />
+                  Units
+                </div>{" "}
+                <img src={dropdownIcon} width={10} height={10} />
+              </div>
             </>
           }
           options={
@@ -189,61 +192,19 @@ function App() {
               margin: 0,
             }}
           >
-            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
-            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
-            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
-            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
-            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
-            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
-            <DayCard day="Tue" high="20" low="14" weather={sunnyIcon} />
+            {data.daily.time.map((d, index) => (
+              <DayCard
+                day={new Date(d).toLocaleDateString("en-US", {
+                  weekday: "short",
+                })}
+                high={Math.round(data.daily.temperature_2m_max[index])}
+                low={Math.round(data.daily.temperature_2m_min[index])}
+                weather={sunnyIcon}
+              />
+            ))}
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            borderRadius: 10,
-            height: 660,
-            width: 350,
-            flex: 1,
-            gap: 10,
-            backgroundColor: "#25253f",
-            padding: 20,
-            flexDirection: "column",
-            overflowY: "auto",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 10,
-            }}
-          >
-            <p style={{ color: "white", fontSize: 20, fontFamily: "DM Sans" }}>
-              Hourly forecast
-            </p>
-            <Dropdown
-              heading={
-                <>
-                  Tuesday <img src={dropdownIcon} width={10} height={10} />
-                </>
-              }
-              options={
-                <>
-                  <button>Wednesday</button> <button>Wednesday</button>
-                  <button>Wednesday</button>
-                  <button>Wednesday</button>
-                  <button>Wednesday</button>
-                  <button>Wednesday</button>
-                </>
-              }
-            />
-          </div>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-            <HourCard temperature={20} icon={sunnyIcon} hour={`${i} PM`} />
-          ))}
-        </div>
+        <HourlyForecast data={data} />
       </div>
     </div>
   );
@@ -308,7 +269,9 @@ function WeatherToday({ city, country, date, temperature, weather }) {
             margin: 0,
           }}
         >
-          {city}, {country}
+          {country != undefined && country != city
+            ? `${city}, ${country}`
+            : `${city}`}
         </p>
         <p
           style={{
@@ -441,8 +404,8 @@ function Dropdown({ heading, options }) {
           borderRadius: 10,
           backgroundColor: "hsl(243, 23%, 30%)",
           color: "white",
-          padding: 10,
-          width: 100,
+          padding: 20,
+          width: 110,
           height: 40,
           gap: 10,
           justifyContent: "center",
@@ -457,6 +420,7 @@ function Dropdown({ heading, options }) {
       </button>
       {open && (
         <div
+          onClick={() => setOpen(false)}
           className="dropdown"
           style={{
             position: "absolute",
@@ -474,6 +438,79 @@ function Dropdown({ heading, options }) {
           {options}
         </div>
       )}
+    </div>
+  );
+}
+function HourlyForecast({ data }) {
+  const [dayOffset, setDayOffset] = useState(0);
+  return (
+    <div
+      style={{
+        display: "flex",
+        borderRadius: 10,
+        height: 660,
+        width: 350,
+        flex: 1,
+        gap: 10,
+        backgroundColor: "#25253f",
+        padding: 20,
+        flexDirection: "column",
+        overflowY: "auto",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 10,
+        }}
+      >
+        <p style={{ color: "white", fontSize: 20, fontFamily: "DM Sans" }}>
+          Hourly forecast
+        </p>
+        <Dropdown
+          heading={
+            <>
+              {new Date(data.daily.time[dayOffset]).toLocaleDateString(
+                "en-US",
+                {
+                  weekday: "long",
+                },
+              )}
+              <img src={dropdownIcon} width={10} height={10} />
+            </>
+          }
+          options={
+            <>
+              {data.daily.time.map((d, index) => (
+                <button
+                  onClick={() => {
+                    setDayOffset(index);
+                  }}
+                  key={d}
+                >
+                  {new Date(d).toLocaleDateString("en-US", {
+                    weekday: "long",
+                  })}
+                </button>
+              ))}
+            </>
+          }
+        />
+      </div>
+      {data.hourly.time.map((i, index) => (
+        <HourCard
+          key={i}
+          temperature={data.hourly.temperature_2m[index + 24 * dayOffset]}
+          icon={sunnyIcon}
+          hour={`${new Date(
+            data.hourly.time[index + 24 * dayOffset],
+          ).toLocaleTimeString("en-US", {
+            hour: "numeric",
+          })}`}
+        />
+      ))}
     </div>
   );
 }
