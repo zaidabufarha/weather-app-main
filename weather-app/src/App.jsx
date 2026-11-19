@@ -4,6 +4,7 @@ import logo from "./assets/images/logo.svg";
 import sunnyIcon from "./assets/images/icon-sunny.webp";
 import dropdownIcon from "./assets/images/icon-dropdown.svg";
 import gearIcon from "./assets/images/icon-units.svg";
+import checkmarkIcon from "./assets/images/icon-checkmark.svg";
 import SearchBar from "./SearchBar";
 import { useQuery } from "@tanstack/react-query";
 
@@ -21,16 +22,15 @@ function App() {
   });
 
   const { isPending, error, data } = useQuery({
-    queryKey: ["geocode", place],
+    queryKey: ["geocode", place, tempUnit, speedUnit, precipitationUnit],
 
     queryFn: () =>
       fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,apparent_temperature,relative_humidity_2m&timezone=auto`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,apparent_temperature,relative_humidity_2m&timezone=auto${speedUnit == "mph" ? `&wind_speed_unit=mph` : ""}${tempUnit == "°F" ? `&temperature_unit=fahrenheit` : ""}${tempUnit == "in" ? `&precipitation_unit=inch` : ""}`,
       ).then((res) => res.json()),
   });
-
-  if (isPending) return "Loading...";
-  else if (!data.latitude && data.generationtime_ms) return "hi";
+  //if (isPending) return "Loading...";
+  //if (!isPending && !data.latitude && data.generationtime_ms) return "hi";
   //if (error) return "An error has occured: " + error.message;
 
   return (
@@ -83,7 +83,29 @@ function App() {
           }
           options={
             <>
-              <button>Switch to Imperial</button>
+              <button
+                onClick={() => {
+                  if (
+                    tempUnit == "°F" &&
+                    speedUnit == "mph" &&
+                    precipitationUnit == "in"
+                  ) {
+                    setTempUnit("°C");
+                    setSpeedUnit("km/h");
+                    setPrecipitationUnit("mm");
+                  } else {
+                    setTempUnit("°F");
+                    setSpeedUnit("mph");
+                    setPrecipitationUnit("in");
+                  }
+                }}
+              >
+                {tempUnit == "°F" &&
+                speedUnit == "mph" &&
+                precipitationUnit == "in"
+                  ? "Switch to Metric"
+                  : "Switch to Imperial"}
+              </button>
               <p
                 style={{
                   margin: 0,
@@ -95,8 +117,12 @@ function App() {
               >
                 Temperature
               </p>
-              <button>Celsius (°C)</button>
-              <button>Fahrenheit (°F)</button>
+              <button onClick={() => setTempUnit("°C")}>
+                Celsius (°C){tempUnit == "°C" && <img src={checkmarkIcon} />}
+              </button>
+              <button onClick={() => setTempUnit("°F")}>
+                Fahrenheit (°F){tempUnit == "°F" && <img src={checkmarkIcon} />}
+              </button>
               <hr />
               <p
                 style={{
@@ -109,8 +135,12 @@ function App() {
               >
                 Wind Speed
               </p>
-              <button>km/h</button>
-              <button>mph</button>
+              <button onClick={() => setSpeedUnit("km/h")}>
+                km/h{speedUnit == "km/h" && <img src={checkmarkIcon} />}
+              </button>
+              <button onClick={() => setSpeedUnit("mph")}>
+                mph {speedUnit == "mph" && <img src={checkmarkIcon} />}
+              </button>
               <hr />
               <p
                 style={{
@@ -123,8 +153,14 @@ function App() {
               >
                 Precipitation
               </p>
-              <button>Milimeters (mm)</button>
-              <button>Inches (in)</button>
+              <button onClick={() => setPrecipitationUnit("mm")}>
+                Milimeters (mm){" "}
+                {precipitationUnit == "mm" && <img src={checkmarkIcon} />}
+              </button>
+              <button onClick={() => setPrecipitationUnit("in")}>
+                Inches (in){" "}
+                {precipitationUnit == "in" && <img src={checkmarkIcon} />}
+              </button>
             </>
           }
         />
@@ -149,29 +185,41 @@ function App() {
             gap: 30,
           }}
         >
-          <WeatherToday
-            city={place.name}
-            country={place.country}
-            temperature={data.current.temperature_2m}
-            weather="sunny"
-            date={new Date(data.current.time)}
-          />
+          {isPending ? (
+            <h1>hi</h1>
+          ) : (
+            <WeatherToday
+              city={place.name}
+              country={place.country}
+              temperature={data.current.temperature_2m}
+              weather="sunny"
+              date={new Date(data.current.time)}
+            />
+          )}
           <div style={{ display: "flex", gap: 30, width: 800, margin: 0 }}>
             <RowCard
               text="Feels like"
-              value={data.current.apparent_temperature + "°"}
+              value={isPending ? "-" : data.current.apparent_temperature + "°"}
             />
             <RowCard
               text="Humidity"
-              value={data.current.relative_humidity_2m + "%"}
+              value={isPending ? "-" : data.current.relative_humidity_2m + "%"}
             />
             <RowCard
               text="Wind"
-              value={data.current.relative_humidity_2m + " km/h"}
+              value={
+                isPending
+                  ? "-"
+                  : Math.round(data.current.wind_speed_10m) + " " + speedUnit
+              }
             />
             <RowCard
               text="Precipitation"
-              value={`${data.current.precipitation} mm`}
+              value={
+                isPending
+                  ? "-"
+                  : `${data.current.precipitation} ${precipitationUnit}`
+              }
             />
           </div>
           <p
@@ -192,19 +240,43 @@ function App() {
               margin: 0,
             }}
           >
-            {data.daily.time.map((d, index) => (
-              <DayCard
-                day={new Date(d).toLocaleDateString("en-US", {
-                  weekday: "short",
-                })}
-                high={Math.round(data.daily.temperature_2m_max[index])}
-                low={Math.round(data.daily.temperature_2m_min[index])}
-                weather={sunnyIcon}
-              />
-            ))}
+            {Array(7)
+              .fill(0)
+              .map((d, index) =>
+                isPending ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      backgroundColor: "hsl(243, 23%, 30%)",
+                      padding: 10,
+                      borderRadius: 10,
+                      alignItems: "center",
+                      color: "white",
+                      fontSize: 18,
+                      fontFamily: "DM Sans",
+                      margin: 0,
+                      flex: 1,
+                    }}
+                  ></div>
+                ) : (
+                  <DayCard
+                    key={data.daily.time[index]}
+                    day={new Date(data.daily.time[index]).toLocaleDateString(
+                      "en-US",
+                      {
+                        weekday: "short",
+                      },
+                    )}
+                    high={Math.round(data.daily.temperature_2m_max[index])}
+                    low={Math.round(data.daily.temperature_2m_min[index])}
+                    weather={sunnyIcon}
+                  />
+                ),
+              )}
           </div>
         </div>
-        <HourlyForecast data={data} />
+        <HourlyForecast data={data} isPending={isPending} />
       </div>
     </div>
   );
@@ -441,7 +513,7 @@ function Dropdown({ heading, options }) {
     </div>
   );
 }
-function HourlyForecast({ data }) {
+function HourlyForecast({ data, isPending }) {
   const [dayOffset, setDayOffset] = useState(0);
   return (
     <div
@@ -471,46 +543,60 @@ function HourlyForecast({ data }) {
         </p>
         <Dropdown
           heading={
-            <>
-              {new Date(data.daily.time[dayOffset]).toLocaleDateString(
-                "en-US",
-                {
-                  weekday: "long",
-                },
-              )}
-              <img src={dropdownIcon} width={10} height={10} />
-            </>
+            isPending ? (
+              "-"
+            ) : (
+              <>
+                {new Date(data.daily.time[dayOffset]).toLocaleDateString(
+                  "en-US",
+                  {
+                    weekday: "long",
+                  },
+                )}
+                <img src={dropdownIcon} width={10} height={10} />
+              </>
+            )
           }
           options={
-            <>
-              {data.daily.time.map((d, index) => (
-                <button
-                  onClick={() => {
-                    setDayOffset(index);
-                  }}
-                  key={d}
-                >
-                  {new Date(d).toLocaleDateString("en-US", {
-                    weekday: "long",
-                  })}
-                </button>
-              ))}
-            </>
+            isPending ? (
+              "-"
+            ) : (
+              <>
+                {data.daily.time.map((d, index) => (
+                  <button
+                    onClick={() => {
+                      setDayOffset(index);
+                    }}
+                    key={d}
+                  >
+                    {new Date(d).toLocaleDateString("en-US", {
+                      weekday: "long",
+                    })}
+                  </button>
+                ))}
+              </>
+            )
           }
         />
       </div>
-      {data.hourly.time.map((i, index) => (
-        <HourCard
-          key={i}
-          temperature={data.hourly.temperature_2m[index + 24 * dayOffset]}
-          icon={sunnyIcon}
-          hour={`${new Date(
-            data.hourly.time[index + 24 * dayOffset],
-          ).toLocaleTimeString("en-US", {
-            hour: "numeric",
-          })}`}
-        />
-      ))}
+      {Array(24)
+        .fill("")
+        .map((i, index) =>
+          isPending ? (
+            <HourCard />
+          ) : (
+            <HourCard
+              key={data.hourly.time[index + 24 * dayOffset]}
+              temperature={data.hourly.temperature_2m[index + 24 * dayOffset]}
+              icon={sunnyIcon}
+              hour={`${new Date(
+                data.hourly.time[index + 24 * dayOffset],
+              ).toLocaleTimeString("en-US", {
+                hour: "numeric",
+              })}`}
+            />
+          ),
+        )}
     </div>
   );
 }
