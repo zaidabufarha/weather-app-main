@@ -26,58 +26,22 @@ function App() {
   });
 
   const { isPending, error, data } = useQuery({
-    queryKey: ["geocode", place, tempUnit, speedUnit, precipitationUnit],
+    queryKey: ["forecast", place, tempUnit, speedUnit, precipitationUnit],
 
     queryFn: () =>
       fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,apparent_temperature,relative_humidity_2m&timezone=auto${speedUnit == "mph" ? `&wind_speed_unit=mph` : ""}${tempUnit == "°F" ? `&temperature_unit=fahrenheit` : ""}${tempUnit == "in" ? `&precipitation_unit=inch` : ""}`,
       ).then((res) => res.json()),
   });
-  //if (isPending) return "Loading...";
-  //if (!isPending && !data.latitude && data.generationtime_ms) return "hi";
-  //if (error) return "An error has occured: " + error.message;
-
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: " #02012b",
-        margin: 0,
-        width: "100%",
-        minHeight: "100vh",
-        padding: 40,
-        alignItems: "center",
-        gap: 20,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    <div className="app">
+      <div className="app__header">
         <img src={logo} />
         <Dropdown
           heading={
             <>
-              <div
-                style={{
-                  display: "flex",
-                  borderRadius: 10,
-                  backgroundColor: "hsl(243, 23%, 30%)",
-                  color: "white",
-                  padding: 10,
-                  width: 100,
-                  height: 40,
-                  gap: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ display: "flex", gap: 5 }}>
+              <div className="units-button">
+                <div className="units-button__label">
                   <img src={gearIcon} width={15} height={15} />
                   Units
                 </div>{" "}
@@ -88,6 +52,7 @@ function App() {
           options={
             <>
               <button
+                className="dropdown__option"
                 onClick={() => {
                   if (
                     tempUnit == "°F" &&
@@ -110,58 +75,46 @@ function App() {
                   ? "Switch to Metric"
                   : "Switch to Imperial"}
               </button>
-              <p
-                style={{
-                  margin: 0,
-                  padding: 10,
-                  textAlign: "left",
-                  fontSize: 11,
-                  color: "hsl(243, 23%, 80%)",
-                }}
+              <p className="dropdown__label">Temperature</p>
+              <button
+                className="dropdown__option"
+                onClick={() => setTempUnit("°C")}
               >
-                Temperature
-              </p>
-              <button onClick={() => setTempUnit("°C")}>
                 Celsius (°C){tempUnit == "°C" && <img src={checkmarkIcon} />}
               </button>
-              <button onClick={() => setTempUnit("°F")}>
+              <button
+                className="dropdown__option"
+                onClick={() => setTempUnit("°F")}
+              >
                 Fahrenheit (°F){tempUnit == "°F" && <img src={checkmarkIcon} />}
               </button>
               <hr />
-              <p
-                style={{
-                  margin: 0,
-                  padding: 10,
-                  textAlign: "left",
-                  fontSize: 11,
-                  color: "hsl(243, 23%, 80%)",
-                }}
+              <p className="dropdown__label">Wind Speed</p>
+              <button
+                className="dropdown__option"
+                onClick={() => setSpeedUnit("km/h")}
               >
-                Wind Speed
-              </p>
-              <button onClick={() => setSpeedUnit("km/h")}>
                 km/h{speedUnit == "km/h" && <img src={checkmarkIcon} />}
               </button>
-              <button onClick={() => setSpeedUnit("mph")}>
+              <button
+                className="dropdown__option"
+                onClick={() => setSpeedUnit("mph")}
+              >
                 mph {speedUnit == "mph" && <img src={checkmarkIcon} />}
               </button>
               <hr />
-              <p
-                style={{
-                  margin: 0,
-                  padding: 10,
-                  textAlign: "left",
-                  fontSize: 11,
-                  color: "hsl(243, 23%, 80%)",
-                }}
+              <p className="dropdown__label">Precipitation</p>
+              <button
+                className="dropdown__option"
+                onClick={() => setPrecipitationUnit("mm")}
               >
-                Precipitation
-              </p>
-              <button onClick={() => setPrecipitationUnit("mm")}>
                 Milimeters (mm){" "}
                 {precipitationUnit == "mm" && <img src={checkmarkIcon} />}
               </button>
-              <button onClick={() => setPrecipitationUnit("in")}>
+              <button
+                className="dropdown__option"
+                onClick={() => setPrecipitationUnit("in")}
+              >
                 Inches (in){" "}
                 {precipitationUnit == "in" && <img src={checkmarkIcon} />}
               </button>
@@ -169,48 +122,17 @@ function App() {
           }
         />
       </div>
-      <h1
-        style={{
-          color: "white",
-          fontFamily: "Bricolage Grotesque",
-          fontWeight: 700,
-          fontSize: "60px",
-          textAlign: "center",
-        }}
-      >
-        How's the sky looking today?
-      </h1>
+      <h1 className="app__title">How's the sky looking today?</h1>
       <SearchBar setPlace={setPlace} />
       {data && data.error ? (
-        <h2 style={{ color: "white", fontFamily: "DM Sans" }}>
-          No search result found!
-        </h2>
+        <h2 className="app__error">No search result found!</h2>
       ) : (
-        <div style={{ display: "flex", gap: 20 }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 30,
-            }}
-          >
+        <div className="app__main">
+          <div className="app__content">
             {isPending ? (
-              <div
-                style={{
-                  backgroundColor: "#25253f",
-                  height: 286,
-                  width: 800,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: 20,
-                  color: "white",
-                  fontFamily: "DM Sans",
-                }}
-              >
-                <h1 style={{ fontSize: 100, margin: 0 }}>. . .</h1>
-                <p style={{ margin: 0 }}>Loading...</p>
+              <div className="weather-today weather-today--loading">
+                <h1 className="weather-today__loading-dots">. . .</h1>
+                <p className="weather-today__loading-text">Loading...</p>
               </div>
             ) : (
               <WeatherToday
@@ -221,7 +143,7 @@ function App() {
                 date={new Date(data.current.time)}
               />
             )}
-            <div style={{ display: "flex", gap: 30, width: 800, margin: 0 }}>
+            <div className="app__stats">
               <RowCard
                 text="Feels like"
                 value={
@@ -251,44 +173,15 @@ function App() {
                 }
               />
             </div>
-            <p
-              style={{
-                color: "white",
-                fontFamily: "DM Sans",
-                margin: 0,
-                fontSize: "18px",
-              }}
-            >
-              Daily forecast:
-            </p>
-            <div
-              style={{
-                display: "flex",
-                gap: 20,
-                width: 800,
-                margin: 0,
-              }}
-            >
+            <p className="app__section-title">Daily forecast:</p>
+            <div className="app__daily">
               {Array(7)
                 .fill(0)
                 .map((d, index) =>
                   isPending ? (
                     <div
                       key={index}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        backgroundColor: "hsl(243, 23%, 30%)",
-                        padding: 10,
-                        borderRadius: 10,
-                        alignItems: "center",
-                        color: "white",
-                        fontSize: 18,
-                        fontFamily: "DM Sans",
-                        margin: 0,
-                        height: 144,
-                        flex: 1,
-                      }}
+                      className="day-card day-card--loading"
                     ></div>
                   ) : (
                     <DayCard

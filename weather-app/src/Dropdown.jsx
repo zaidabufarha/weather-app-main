@@ -15,21 +15,9 @@ function Dropdown({ heading, options }) {
     };
   }, []);
   return (
-    <div style={{ position: "relative" }} ref={ref}>
+    <div className="dropdown" ref={ref}>
       <button
-        style={{
-          display: "flex",
-          borderRadius: 10,
-          backgroundColor: "hsl(243, 23%, 30%)",
-          color: "white",
-          padding: 20,
-          width: 110,
-          height: 40,
-          gap: 10,
-          justifyContent: "center",
-          alignItems: "center",
-          fontFamily: "DM Sans",
-        }}
+        className="dropdown__toggle"
         onClick={() => {
           setOpen(!open);
         }}
@@ -37,22 +25,7 @@ function Dropdown({ heading, options }) {
         {heading}
       </button>
       {open && (
-        <div
-          onClick={() => setOpen(false)}
-          className="dropdown"
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "110%",
-            borderRadius: 10,
-            backgroundColor: "hsl(243, 23%, 30%)",
-            color: "white",
-            width: 150,
-            padding: 5,
-            fontFamily: "DM Sans",
-            textAlign: "left",
-          }}
-        >
+        <div onClick={() => setOpen(false)} className="dropdown__menu">
           {options}
         </div>
       )}

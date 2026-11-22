@@ -1,6 +1,6 @@
-input::placeholder {
-  color: white;
-}
+/* ==========================================================================
+   Base / resets
+   ========================================================================== */
 
 html,
 body,
@@ -17,40 +17,454 @@ button {
   border: none;
   cursor: pointer;
 }
-.dropdown button {
-  border: none;
-  cursor: pointer;
-  display: flex;
-  width: 100%; height: 100%;
-  padding:10px;
-   border-radius: 10px;
-   color: white;
-   text-align: left;
-   justify-content: space-between;
-   background-color: hsl(243, 23%, 30%);
-}
-.dropdown button:hover {
-background-color: hsl(243, 23%, 40%); }
 
-.suggestion button {
-  border: none;
-  cursor: pointer;
-  width: 100%; height: 100%;
-  padding:10px;
-   border-radius: 10px;
-   color: white;
-   text-align: left;
-   background-color: transparent;
-}
-.suggestion button:hover {
-background-color: hsl(243, 23%, 30%); }
-hr{
-  background-color: hsl(243, 23%, 60%);;
+hr {
+  background-color: hsl(243, 23%, 60%);
   height: 1px;
   border: none;
-
 }
 
 input {
   outline: none;
+}
+
+/* ==========================================================================
+   App (page layout)
+   ========================================================================== */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  background-color: #02012b;
+  margin: 0;
+  width: 100vw;
+  min-height: 100vh;
+  padding: 40px;
+  align-items: center;
+  gap: 2vh;
+}
+
+.app__header {
+  display: flex;
+  width: 95vw;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app__title {
+  color: white;
+  font-family: "Bricolage Grotesque";
+  font-weight: 700;
+  font-size: 60px;
+  text-align: center;
+}
+
+.app__error {
+  color: white;
+  font-family: "DM Sans";
+}
+
+.app__main {
+  display: flex;
+  gap: 1vw;
+  justify-items: center;
+}
+
+.app__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+.app__stats {
+  display: flex;
+  gap: 3vh;
+  width: 52vw;
+  margin: 0;
+}
+
+.app__section-title {
+  color: white;
+  font-family: "DM Sans";
+  margin: 0;
+  font-size: 18px;
+}
+
+.app__daily {
+  display: flex;
+  gap: 20px;
+  width: 800px;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Units button (Dropdown heading in the header)
+   ========================================================================== */
+
+.units-button {
+  display: flex;
+  border-radius: 10px;
+  background-color: hsl(243, 23%, 30%);
+  color: white;
+  padding: 10px;
+  width: 100px;
+  height: 40px;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.units-button__label {
+  display: flex;
+  gap: 5px;
+}
+
+/* ==========================================================================
+   Dropdown
+   ========================================================================== */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown__toggle {
+  display: flex;
+  border-radius: 10px;
+  background-color: hsl(243, 23%, 30%);
+  color: white;
+  padding: 20px;
+  width: 110px;
+  height: 40px;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  font-family: "DM Sans";
+}
+
+.dropdown__menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  border-radius: 10px;
+  background-color: hsl(243, 23%, 30%);
+  color: white;
+  width: 150px;
+  padding: 5px;
+  font-family: "DM Sans";
+  text-align: left;
+}
+
+.dropdown__label {
+  margin: 0;
+  padding: 10px;
+  text-align: left;
+  font-size: 11px;
+  color: hsl(243, 23%, 80%);
+}
+
+.dropdown__option {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  text-align: left;
+  justify-content: space-between;
+  background-color: hsl(243, 23%, 30%);
+}
+
+.dropdown__option:hover {
+  background-color: hsl(243, 23%, 40%);
+}
+
+/* ==========================================================================
+   Search bar
+   ========================================================================== */
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+}
+
+.search-bar__field {
+  position: relative;
+  display: flex;
+  background-color: #25253f;
+  width: 500px;
+  height: 50px;
+  padding: 10px;
+  align-content: center;
+  gap: 20px;
+  border-radius: 10px;
+}
+
+.search-bar__icon {
+  width: 25px;
+}
+
+.search-bar__input {
+  width: 800px;
+  margin: 0;
+  font-size: 18px;
+  border-width: 0;
+  background-color: transparent;
+  color: white;
+}
+
+.search-bar__input::placeholder {
+  color: white;
+}
+
+.search-bar__suggestions {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  padding: 5px;
+  border-radius: 10px;
+  top: 110%;
+  background-color: #25253f;
+  color: white;
+  font-family: "DM Sans";
+  font-size: 9px;
+  margin: 0;
+}
+
+.search-bar__suggestion {
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  text-align: left;
+  background-color: transparent;
+}
+
+.search-bar__suggestion:hover {
+  background-color: hsl(243, 23%, 30%);
+}
+
+.search-bar__submit {
+  border-radius: 10px;
+  background-color: hsl(233, 67%, 56%);
+  color: white;
+  padding: 10px;
+  width: 100px;
+  font-size: 18px;
+}
+
+@media (max-width: 600px){
+.search-bar{
+  flex-direction: column;
+  align-items: center;
+}
+.search-bar__field{
+  width: 80vw;
+}
+.search-bar__submit{
+  margin: 5vh;
+  width: 60vw;
+
+}
+}
+
+/* ==========================================================================
+   Weather today (hero card)
+   ========================================================================== */
+
+.weather-today {
+  background: url("./assets/images/bg-today-large.svg");
+  height: 286px;
+  width: 52vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.weather-today--loading {
+  background: #25253f;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  font-family: "DM Sans";
+}
+
+.weather-today__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.weather-today__location {
+  color: white;
+  font-size: 30px;
+  font-family: "DM Sans";
+  font-weight: 700;
+  margin: 0;
+}
+
+.weather-today__date {
+  color: white;
+  font-size: 20px;
+  font-family: "DM Sans";
+  font-weight: 500;
+  margin: 0;
+}
+
+.weather-today__current {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.weather-today__temp {
+  color: white;
+  font-size: 90px;
+  font-family: "DM Sans";
+  font-weight: 500;
+  font-style: italic;
+}
+
+.weather-today__loading-dots {
+  font-size: 100px;
+  margin: 0;
+}
+
+.weather-today__loading-text {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Row card (feels like / humidity / wind / precipitation)
+   ========================================================================== */
+
+.row-card {
+  display: flex;
+  flex-direction: column;
+  background-color: hsl(243, 23%, 30%);
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1;
+}
+
+.row-card__label {
+  color: white;
+  font-size: 20px;
+  font-family: "DM Sans";
+  margin: 0;
+}
+
+.row-card__value {
+  color: white;
+  font-size: 36px;
+  font-family: "DM Sans";
+  margin: 0;
+}
+
+/* ==========================================================================
+   Day card (daily forecast)
+   ========================================================================== */
+
+.day-card {
+  display: flex;
+  flex-direction: column;
+  background-color: hsl(243, 23%, 30%);
+  padding: 10px;
+  border-radius: 10px;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  font-family: "DM Sans";
+  margin: 0;
+  flex: 1;
+}
+
+.day-card--loading {
+  height: 144px;
+}
+
+.day-card__day {
+  font-size: 24px;
+  margin: 0;
+}
+
+.day-card__icon {
+  width: 70px;
+}
+
+.day-card__temps {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.day-card__temp {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Hourly forecast (side panel)
+   ========================================================================== */
+
+.hourly-forecast {
+  display: flex;
+  border-radius: 10px;
+  height: 660px;
+  width: 22vw;
+  flex: 1;
+  gap: 10px;
+  background-color: #25253f;
+  padding: 20px;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.hourly-forecast__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.hourly-forecast__title {
+  color: white;
+  font-size: 20px;
+  font-family: "DM Sans";
+}
+
+/* ==========================================================================
+   Hour card (one row in the hourly forecast)
+   ========================================================================== */
+
+.hour-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: #2f2f49;
+  align-content: center;
+  gap: 20px;
+  font-size: 20px;
+  border-radius: 10px;
+  color: white;
+  font-family: "DM Sans";
+}
+
+.hour-card__time {
+  display: flex;
+  align-items: center;
+}
+
+.hour-card__temp {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.hour-card__placeholder {
+  height: 65px;
 }

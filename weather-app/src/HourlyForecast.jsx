@@ -7,31 +7,9 @@ import sunnyIcon from "./assets/images/icon-sunny.webp";
 function HourlyForecast({ data, isPending }) {
   const [dayOffset, setDayOffset] = useState(0);
   return (
-    <div
-      style={{
-        display: "flex",
-        borderRadius: 10,
-        height: 660,
-        width: 350,
-        flex: 1,
-        gap: 10,
-        backgroundColor: "#25253f",
-        padding: 20,
-        flexDirection: "column",
-        overflowY: "auto",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 10,
-        }}
-      >
-        <p style={{ color: "white", fontSize: 20, fontFamily: "DM Sans" }}>
-          Hourly forecast
-        </p>
+    <div className="hourly-forecast">
+      <div className="hourly-forecast__header">
+        <p className="hourly-forecast__title">Hourly forecast</p>
         <Dropdown
           heading={
             isPending ? (
@@ -57,6 +35,7 @@ function HourlyForecast({ data, isPending }) {
               <>
                 {data.daily.time.map((d, index) => (
                   <button
+                    className="dropdown__option"
                     onClick={() => {
                       setDayOffset(index);
                     }}
@@ -76,23 +55,8 @@ function HourlyForecast({ data, isPending }) {
         .fill("")
         .map((i, index) =>
           isPending ? (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                backgroundColor: "white",
-                justifyContent: "space-between",
-                padding: 5,
-                backgroundColor: "#2F2F49",
-                alignContent: "center",
-                gap: 20,
-                fontSize: 20,
-                borderRadius: 10,
-                color: "white",
-                fontFamily: "DM Sans",
-              }}
-            >
-              <div style={{ height: 65 }}></div>
+            <div key={index} className="hour-card">
+              <div className="hour-card__placeholder"></div>
             </div>
           ) : (
             <HourCard

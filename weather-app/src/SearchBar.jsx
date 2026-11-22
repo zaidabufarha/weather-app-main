@@ -60,65 +60,31 @@ function SearchBar({ setPlace }) {
   }, [submitting, data]);
   return (
     <form
-      style={{ display: "flex", gap: 10 }}
+      className="search-bar"
       onSubmit={(e) => {
         e.preventDefault();
         setDebouncedInput(input);
         setSubmitting(true);
       }}
     >
-      <div
-        ref={ref}
-        style={{
-          position: "relative",
-          display: "flex",
-          backgroundColor: "#25253f",
-          width: 500,
-          height: 50,
-          padding: 10,
-          alignContent: "center",
-          gap: 20,
-          borderRadius: 10,
-        }}
-      >
-        <img src={searchIcon} style={{ width: 25 }} />
+      <div ref={ref} className="search-bar__field">
+        <img src={searchIcon} className="search-bar__icon" />
         <input
+          className="search-bar__input"
           onClick={() => {
             setOpen(true);
           }}
           value={input}
           onChange={(i) => setInput(i.target.value)}
           placeholder="Search for a place..."
-          style={{
-            width: 800,
-            margin: 0,
-            fontSize: "18px",
-            borderWidth: 0,
-            backgroundColor: "transparent",
-            color: "white",
-          }}
         ></input>
 
         {data && open && data.results && (
-          <div
-            className="suggestion"
-            style={{
-              position: "absolute",
-              width: "100%",
-              left: 0,
-              padding: 5,
-              borderRadius: 10,
-              top: "110%",
-              backgroundColor: "#25253f",
-              color: "white",
-              fontFamily: "DM Sans",
-              fontSize: 9,
-              margin: 0,
-            }}
-          >
+          <div className="search-bar__suggestions">
             {data.results.map((r) => (
               <button
                 type="button"
+                className="search-bar__suggestion"
                 key={r.id}
                 onClick={() => {
                   setPlace({
@@ -138,17 +104,7 @@ function SearchBar({ setPlace }) {
           </div>
         )}
       </div>
-      <button
-        type="submit"
-        style={{
-          borderRadius: 10,
-          backgroundColor: "hsl(233, 67%, 56%)",
-          color: "white",
-          padding: 10,
-          width: 100,
-          fontSize: 18,
-        }}
-      >
+      <button type="submit" className="search-bar__submit">
         Search
       </button>
     </form>
