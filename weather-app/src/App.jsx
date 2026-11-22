@@ -186,7 +186,17 @@ function App() {
           }}
         >
           {isPending ? (
-            <h1>hi</h1>
+            <div
+              style={{
+                backgroundColor: "#25253f",
+                height: 286,
+                width: 800,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: 20,
+              }}
+            ></div>
           ) : (
             <WeatherToday
               city={place.name}
