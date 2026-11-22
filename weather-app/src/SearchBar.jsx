@@ -53,6 +53,9 @@ function SearchBar({ setPlace }) {
         longitude: data.results[0].longitude,
       });
       setSubmitting(false);
+    } else if (data && data.generationtime_ms && submitting) {
+      //response with no data
+      setPlace({});
     }
   }, [submitting, data]);
   return (
@@ -66,7 +69,6 @@ function SearchBar({ setPlace }) {
     >
       <div
         ref={ref}
-       
         style={{
           position: "relative",
           display: "flex",
@@ -80,9 +82,10 @@ function SearchBar({ setPlace }) {
         }}
       >
         <img src={searchIcon} style={{ width: 25 }} />
-        <input  onClick={() => {
-          setOpen(true);
-        }}
+        <input
+          onClick={() => {
+            setOpen(true);
+          }}
           value={input}
           onChange={(i) => setInput(i.target.value)}
           placeholder="Search for a place..."
@@ -114,7 +117,8 @@ function SearchBar({ setPlace }) {
             }}
           >
             {data.results.map((r) => (
-              <button type='button'
+              <button
+                type="button"
                 key={r.id}
                 onClick={() => {
                   setPlace({
@@ -123,7 +127,7 @@ function SearchBar({ setPlace }) {
                     latitude: r.latitude,
                     longitude: r.longitude,
                   });
-                  setOpen(false)
+                  setOpen(false);
                 }}
               >
                 {r.name != r.country && r.country != undefined
