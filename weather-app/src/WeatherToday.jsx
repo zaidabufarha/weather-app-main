@@ -1,4 +1,4 @@
-import sunnyIcon from "./assets/images/icon-sunny.webp";
+import getWeatherIcon from "./WeatherIcon";
 
 function WeatherToday({ city, country, date, temperature, weather }) {
   return (
@@ -20,12 +20,8 @@ function WeatherToday({ city, country, date, temperature, weather }) {
         </p>
       </div>
       <div className="weather-today__current">
-        <img
-          src={weather === "sunny" ? sunnyIcon : dropdownIcon}
-          width={100}
-          height={100}
-        />
-        <h1 className="weather-today__temp">{temperature}°</h1>
+        <img src={weather} width={100} height={100} />
+        <h1 className="weather-today__temp">{Math.round(temperature)}°</h1>
       </div>
     </div>
   );

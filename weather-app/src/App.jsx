@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import logo from "./assets/images/logo.svg";
-import sunnyIcon from "./assets/images/icon-sunny.webp";
 import dropdownIcon from "./assets/images/icon-dropdown.svg";
 import gearIcon from "./assets/images/icon-units.svg";
 import checkmarkIcon from "./assets/images/icon-checkmark.svg";
@@ -11,6 +10,7 @@ import Dropdown from "./Dropdown";
 import DayCard from "./DayCard";
 import WeatherToday from "./WeatherToday";
 import RowCard from "./RowCard";
+import getWeatherIcon from "./WeatherIcon";
 
 import "./app.css";
 
@@ -139,7 +139,7 @@ function App() {
                 city={place.name}
                 country={place.country}
                 temperature={data.current.temperature_2m}
-                weather="sunny"
+                weather={getWeatherIcon(data.current.weather_code)}
                 date={new Date(data.current.time)}
               />
             )}
@@ -194,7 +194,7 @@ function App() {
                       )}
                       high={Math.round(data.daily.temperature_2m_max[index])}
                       low={Math.round(data.daily.temperature_2m_min[index])}
-                      weather={sunnyIcon}
+                      weather={getWeatherIcon(data.daily.weather_code[index])}
                     />
                   ),
                 )}

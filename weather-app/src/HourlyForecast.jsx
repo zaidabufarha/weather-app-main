@@ -2,8 +2,7 @@ import { useState } from "react";
 import HourCard from "./HourCard";
 import Dropdown from "./Dropdown";
 import dropdownIcon from "./assets/images/icon-dropdown.svg";
-import sunnyIcon from "./assets/images/icon-sunny.webp";
-
+import getWeatherIcon from "./WeatherIcon";
 function HourlyForecast({ data, isPending }) {
   const [dayOffset, setDayOffset] = useState(0);
   return (
@@ -62,7 +61,9 @@ function HourlyForecast({ data, isPending }) {
             <HourCard
               key={data.hourly.time[index + 24 * dayOffset]}
               temperature={data.hourly.temperature_2m[index + 24 * dayOffset]}
-              icon={sunnyIcon}
+              icon={getWeatherIcon(
+                data.hourly.weather_code[index + 24 * dayOffset],
+              )}
               hour={`${new Date(
                 data.hourly.time[index + 24 * dayOffset],
               ).toLocaleTimeString("en-US", {

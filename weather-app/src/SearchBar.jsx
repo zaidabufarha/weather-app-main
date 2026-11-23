@@ -65,6 +65,7 @@ function SearchBar({ setPlace }) {
         e.preventDefault();
         setDebouncedInput(input);
         setSubmitting(true);
+        setOpen(false);
       }}
     >
       <div ref={ref} className="search-bar__field">
