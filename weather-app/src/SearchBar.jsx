@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import searchIcon from "./assets/images/icon-search.svg";
+import loadingIcon from "./assets/images/icon-loading.svg";
+import useExternalClickDetector from "./useExternalClickDetector";
 import { useQuery } from "@tanstack/react-query";
 import "./app.css";
 
-function SearchBar({ setPlace }) {
+function SearchBar({ setPlace, setNoResults }) {
   const [input, setInput] = useState("");
   const [debouncedInput, setDebouncedInput] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -20,19 +22,9 @@ function SearchBar({ setPlace }) {
     };
   }, [input]);
 
-  useEffect(() => {
-    function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  }, []);
+  useExternalClickDetector(ref, setOpen);
 
-  const { isPending, error, data } = useQuery({
+  const { isPending, error, data, isLoading } = useQuery({
     queryKey: ["geocode", debouncedInput],
     enabled: input.length > 2,
     queryFn: () =>
@@ -52,10 +44,13 @@ function SearchBar({ setPlace }) {
         latitude: data.results[0].latitude,
         longitude: data.results[0].longitude,
       });
+      setNoResults(false);
       setSubmitting(false);
     } else if (data && data.generationtime_ms && submitting) {
       //response with no data
-      setPlace({});
+      setNoResults(true);
+      setSubmitting(false);
+      setOpen(true);
     }
   }, [submitting, data]);
   return (
@@ -80,7 +75,7 @@ function SearchBar({ setPlace }) {
           placeholder="Search for a place..."
         ></input>
 
-        {data && open && data.results && (
+        {data && open && data.results ? (
           <div className="search-bar__suggestions">
             {data.results.map((r) => (
               <button
@@ -95,6 +90,7 @@ function SearchBar({ setPlace }) {
                     longitude: r.longitude,
                   });
                   setOpen(false);
+                  setNoResults(false);
                 }}
               >
                 {r.name != r.country && r.country != undefined
@@ -103,6 +99,15 @@ function SearchBar({ setPlace }) {
               </button>
             ))}
           </div>
+        ) : isLoading ? (
+          <div className="search-bar__suggestions">
+            <div className="search-bar__suggestion">
+              <img src={loadingIcon} style={{ marginRight: "1vw" }} />
+              Search in progress
+            </div>
+          </div>
+        ) : (
+          <></>
         )}
       </div>
       <button type="submit" className="search-bar__submit">

@@ -1,19 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-
+import useExternalClickDetector from "./useExternalClickDetector";
 function Dropdown({ heading, options }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
-  useEffect(() => {
-    function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  }, []);
+  useExternalClickDetector(ref, setOpen);
   return (
     <div className="dropdown" ref={ref}>
       <button

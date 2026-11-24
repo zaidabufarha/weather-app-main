@@ -98,6 +98,60 @@ input {
 }
 
 /* ==========================================================================
+   Error screen (API failure)
+   ========================================================================== */
+.error-screen{
+  display: flex;  
+
+  flex-direction: column;
+  gap: 3vh;
+  align-items: center;
+}
+.error-screen__icon {
+  width: 3vw;
+  margin-top: 10vh;
+}
+
+.error-screen__title {
+  color: white;
+  font-family: "Bricolage Grotesque";
+  font-weight: 700;
+  font-size: 2vw;
+  text-align: center;
+  margin: 0;
+}
+
+.error-screen__text {
+  color: white;
+  font-family: "DM Sans";
+  font-size: 1vw;
+  text-align: center;
+  width: 27vw;
+  margin: 0;
+}
+
+.error-screen__retry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+  width: 8vw;
+  padding: 1vw;
+  border-radius: 10px;
+  background-color: hsl(243, 23%, 30%);
+  color: white;
+  font-family: "DM Sans";
+}
+
+.error-screen__retry-icon {
+  width: 1vw;
+}
+
+.error-screen__retry-text {
+  font-size: 1vw;
+}
+
+/* ==========================================================================
    Units button (Dropdown heading in the header)
    ========================================================================== */
 
@@ -113,6 +167,7 @@ input {
   justify-content: center;
   align-items: center;
 }
+
 
 .units-button__label {
   display: flex;
@@ -140,7 +195,10 @@ input {
   align-items: center;
   font-family: "DM Sans";
 }
-
+.dropdown__toggle:focus-visible{
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
 .dropdown__menu {
   position: absolute;
   right: 0;
@@ -151,7 +209,8 @@ input {
   width: 150px;
   padding: 5px;
   font-family: "DM Sans";
-  text-align: left;
+  text-align: left;  z-index: 20;
+outline: 1px solid hsl(243, 23%, 40%);
 }
 
 .dropdown__label {
@@ -176,6 +235,10 @@ input {
   background-color: hsl(243, 23%, 30%);
 }
 
+.dropdown__option:focus-visible{
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
 .dropdown__option:hover {
   background-color: hsl(243, 23%, 40%);
 }
@@ -191,6 +254,7 @@ input {
 }
 
 .search-bar__field {
+  cursor: pointer;
   position: relative;
   display: flex;
   background-color: #25253f;
@@ -201,17 +265,22 @@ input {
   gap: 2vw;
   border-radius: 10px;
 }
+.search-bar__field:focus-within {
+outline: 2px solid white;
+outline-offset: 2px;
+}
 
 .search-bar__icon {
   width: 25px;
 }
 
 .search-bar__input {
-  margin: 0;
+  margin: 0;width: 100%; cursor: pointer;
   border-width: 0;
   background-color: transparent;
   color: white;
-font-size: 1.5vw;
+font-size: 1.5vw;  focus:true
+
 }
 
 .search-bar__input::placeholder {
@@ -255,8 +324,13 @@ font-size: 1.5vw;
   padding: 10px; height: 6vh; justify-items: center;
   width: 10vw;    font-size: 1.5vw;
 
+}.search-bar__submit:hover {
+  background-color: hsl(233, 67%, 40%);;
 }
-
+.search-bar__submit:focus-visible {
+outline: 2px solid hsl(233, 67%, 56%);
+outline-offset: 2px;
+}
 
 
 /* ==========================================================================
@@ -271,7 +345,7 @@ font-size: 1.5vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2vw;
+  padding: 3vw;
   border-radius: 10px;
 }
 
@@ -462,7 +536,7 @@ font-size: 1.5vw;
 
 
 
-@media (max-width:1200px) {
+@media (max-width:1100px) {
   /* ==========================================================================
    Base / resets
    ========================================================================== */
@@ -566,6 +640,40 @@ input {
   margin: 0;
 }
 
+.error-screen{
+  display: flex;  margin-top: 5vh;
+
+  flex-direction: column;
+  gap: 3vh;
+  align-items: center;
+}
+.error-screen__icon {
+  width: 12vw;
+}
+
+.error-screen__title {
+  font-size: 7vw;
+}
+
+.error-screen__text {
+  font-size: 4vw;
+  width: 80vw;
+}
+
+.error-screen__retry {
+  gap: 3vw;
+  width: 30vw;
+  padding: 3vw;
+}
+
+.error-screen__retry-icon {
+  width: 4vw;
+}
+
+.error-screen__retry-text {
+  font-size: 4vw;
+}
+
 /* ==========================================================================
    Units button (Dropdown heading in the header)
    ========================================================================== */
@@ -609,7 +717,10 @@ input {
   align-items: center;
   font-family: "DM Sans";
 }
-
+.dropdown__toggle:focus-visible{
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
 .dropdown__menu {
   position: absolute;
   right: 0;
@@ -621,7 +732,8 @@ input {
   padding: 5px;
   font-family: "DM Sans";
   text-align: left;
-  z-index: 10;
+  z-index: 20;outline: 1px solid hsl(243, 23%, 35%);
+
 }
 
 .dropdown__label {
@@ -644,6 +756,10 @@ input {
   text-align: left;
   justify-content: space-between;
   background-color: hsl(243, 23%, 30%);
+}
+.dropdown__option:focus-visible{
+  outline: 2px solid white;
+  outline-offset: 2px;
 }
 
 .dropdown__option:hover {
@@ -674,7 +790,10 @@ input {
   gap: 2vw;
   border-radius: 10px;
 }
-
+.search-bar__field:focus-within {
+outline: 2px solid white;
+outline-offset: 2px;
+}
 .search-bar__icon {
   width: 25px;
 }
@@ -684,7 +803,7 @@ input {
   border-width: 0;
   background-color: transparent;
   color: white;
-font-size: 2vh;
+font-size: 2vh; width: 100%;
 }
 
 .search-bar__input::placeholder {
@@ -728,18 +847,15 @@ font-size: 2vh;
   color: white;
   padding: 10px; height: 5vh; justify-items: center;
   width: 80vw;    font-size: 2vh;
-
+margin: 1vh;
 
 }
-
-
-.search-bar__field{
-  width: 80vw;
+.search-bar__submit:hover {
+  background-color: hsl(233, 67%, 40%);;
 }
-.search-bar__submit{
-  margin: 2vh;
-  width: 80vw;
-
+.search-bar__submit:focus-visible {
+outline: 2px solid hsl(233, 67%, 56%);
+outline-offset: 2px;
 }
 
 
@@ -888,10 +1004,10 @@ flex-direction: column; gap: 1vh; justify-content: center;
 
 .hourly-forecast {
   display: flex;
+  contain: none;
   border-radius: 10px;
   max-height: 80vh;
   width:80vw;
-  flex: 1;
   gap: 10px;
   background-color: #25253f;
   padding: 20px;
